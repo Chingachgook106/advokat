@@ -1,0 +1,14 @@
+ body { 
+  background-image: url(../images/marmor.png);  
+  background-position: center center; 
+  background-repeat: no-repeat; 
+  background-attachment: fixed;  
+  background-size: cover; 
+  background-color: #666633;   
+ }
+ table {
+	 border:0px solid transparent;
+	 }
+ td {
+  background-color: lightblue;
+ }
