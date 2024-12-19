@@ -1,11 +1,94 @@
 body { 
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   background-image: url(../images/marmor.png);  
   background-position: center center; 
   background-repeat: no-repeat; 
   background-attachment: fixed;  
   background-size: cover; 
   background-color: #666633;   
+  } 
+  .header { 
+    width: 100%;
+    height: 1080px;
+    background-image: url(../images/still-life-with-scales-justiceFHD.jpg);
+    background-size: 100% 70%; 
+    background-position: center; 
+    background-repeat: no-repeat;
   }
+  nav { 
+    box-sizing: border-box;
+    margin: 0;
+    background: radial-gradient(#BFD6E2 1px, rgba(255,255,255,0) 3px);
+    background-size: 10px 10px;
+    }
+    
+    nav > ul {
+    display: flex;
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    }
+    nav a {
+    display: block;
+    text-decoration: none;
+    outline: none;
+    transition: .4s ease-in-out;
+    }
+    .topmenu {
+    backface-visibility: hidden;
+    background: rgba(255,255,255,.8);
+    }
+    .topmenu > li {
+    display: inline-block;
+    position: relative;
+    width: 18%;
+    }
+    .topmenu > li > a {
+    font-family: 'Exo 2', sans-serif;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 30px;
+    font-weight: bold;
+    color: #003559;
+    text-transform: uppercase;
+    }
+    .down:after {
+    content: "\f107";
+    margin-left: 8px;
+    font-family: FontAwesome;
+    }
+    .topmenu li a:hover, .topmenu .active {
+    color: #E6855F;
+    }
+    .submenu {
+    list-style: none;
+    background: white;
+    border: 2px solid #003559;
+    position: absolute;
+    left: 0;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 5;
+    width: 150px;
+    transform: perspective(600px) rotateX(-90deg);
+    transform-origin: 0% 0%;
+    transition: .6s ease-in-out;
+    }
+    .topmenu > li:hover .submenu{
+    visibility: visible;
+    opacity: 1;
+    transform: perspective(600px) rotateX(0deg);
+    }
+    .submenu li a {
+    color: #7f7f7f;
+    font-size: 13px;
+    line-height: 36px;
+    padding: 0 25px;
+    font-family: 'Kurale', serif;
+    }
 table {
 	border:0px solid transparent;
 	}
