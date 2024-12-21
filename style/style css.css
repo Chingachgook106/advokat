@@ -88,7 +88,69 @@ body {
     line-height: 36px;
     padding: 0 25px;
     font-family: 'Kurale', serif;
-    }
+    } 
+
+form { 
+  width: 500px; 
+  margin: 50px 100px;
+} 
+.form-group { 
+  position: relative; 
+  margin-bottom: 45px;
+} 
+input { 
+  display: block;
+  width: 300px; 
+  font-size: 14pt; 
+  padding: 10px; 
+  border: none; 
+  border-bottom: 1px solid #ccc;
+} 
+input:focus { 
+  outline: none; 
+} 
+label { 
+  position: absolute; 
+  top: 10px; 
+  left: 5px; 
+  color: #999; 
+  font-size: 14pt; 
+  font-weight: normal; 
+  pointer-events: none; 
+  transition: all 0.2s ease;
+} 
+input:focus ~ label, 
+input:valid ~ label { 
+  top: -20px; 
+  font-size: 10pt; 
+  color: #5264ae;
+}
+.bar { 
+  display: block; 
+  position: relative; 
+  width: 320px;
+} 
+.bar:before, 
+.bar:after { 
+  content: ""; 
+  height: 2px; 
+  width: 0; 
+  bottom: 1px; 
+  position: absolute; 
+  background: #5264ae; 
+  transition: all 0.2s ease;
+} 
+.bar:before { 
+  left: 50%;
+} 
+.bar:after { 
+  right: 50%;
+} 
+input:focus ~ .bar :before, 
+input:focus ~ .bar :after { 
+  width: 50%;
+}
+
 table {
 	border:0px solid transparent;
 	}
