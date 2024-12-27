@@ -1,7 +1,6 @@
 body { 
   display: flex;
   flex-direction: column;
-  width: 100%;
   background-image: url(../images/marmor.png);  
   background-position: center center; 
   background-repeat: no-repeat; 
@@ -11,13 +10,17 @@ body {
   } 
   .header { 
     width: 100%;
-    height: 1080px;
+    height: 756px; 
+    box-sizing: border-box;
     background-image: url(../images/still-life-with-scales-justiceFHD.jpg);
-    background-size: 100% 70%; 
+    background-size: 100%; 
     background-position: center; 
     background-repeat: no-repeat;
-  }
+  } 
   nav { 
+    position: sticky;
+    top: 2px;
+    width: 100%;
     box-sizing: border-box;
     margin: 0;
     background: radial-gradient(#BFD6E2 1px, rgba(255,255,255,0) 3px);
@@ -150,10 +153,15 @@ input:focus ~ .bar :before,
 input:focus ~ .bar :after { 
   width: 50%;
 }
-
 table {
 	border:0px solid transparent;
 	}
 td {
   background-color: LightCyan;
-  }
+  } 
+footer { 
+
+}
+h2 { 
+
+}  
