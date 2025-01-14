@@ -18,29 +18,40 @@ body {
     background-position: center; 
   } 
   .split-title { 
+    width: 30%;
     margin-top: 2rem;
     margin-left: 3rem; 
     color: #4A1A13;
     display: flex; 
     flex-direction: column; 
     font-family: Geologica Roman, Arial, sans-serif; 
-    font-size: 2.5rem; 
+    font-size: 1.5rem; 
     font-weight: bolder; 
   } 
   .first-string {   
     position: relative; 
-    margin-left: 5rem; 
+    margin-top: 0;
+    margin-left: 1rem; 
+    margin-bottom: 0;
   }  
+  .first-string h1 { 
+    margin-top: 0;
+    margin-bottom: 0; 
+  } 
+  .first-string h1::first-letter { 
+    color: transparent; 
+  }
   .first-string svg { 
     position: absolute; 
-    right: 71.1rem; 
-    bottom: -0.5rem;
+    top: 0.4rem;
+    left: -1.6rem;
   }
   .str0 {stroke:#CF9C83;stroke-width:1.4;stroke-miterlimit:22.9256}
   .fil0 {fill:#2C3659}
   .fil1 {fill:#4A1A13;fill-rule:nonzero} 
   .back-string { 
-    margin-left: 3rem;
+    margin-top: 0; 
+    margin-bottom: 0;
     font-size: 2.2rem;
   }
   nav { 
@@ -190,6 +201,7 @@ td {
   background-color: LightCyan;
   } 
 footer { 
+  position: relative;
   font-family: 'Exo 2', sans-serif;
   color: #003559;
 }
@@ -199,7 +211,9 @@ footer h2 {
   font-size: xx-large;  
 }  
 .adresses { 
+  color: #003559;
   display: inline-block; 
+  margin-bottom: 1vw;
   width: 40%; 
   text-align: center;
 } 
@@ -209,3 +223,10 @@ footer h2 {
   width: 40%; 
   text-align: end;
 } 
+.privacy { 
+  color: #003559;
+  position: absolute;
+  display: block; 
+  left: calc(50% - 10vw); 
+  bottom: 2vw;
+}
