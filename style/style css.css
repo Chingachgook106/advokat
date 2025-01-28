@@ -4,7 +4,7 @@ body {
   flex-direction: column;
   background-image: url(../images/marmor.png);  
   background-position: center center; 
-  background-repeat: no-repeat; 
+  background-repeat: repeat-y; 
   background-attachment: fixed;  
   background-size: cover; 
   background-color: #666633; 
