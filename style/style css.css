@@ -24,7 +24,7 @@ body {
       color: #4A1A13;
       display: flex; 
       flex-direction: column; 
-      font-family: Geologica Roman, Arial, sans-serif; 
+      font-family: 'Geologica Roman', Arial, sans-serif; 
       font-size: 1.5rem; 
       font-weight: bolder; 
       } 
@@ -56,12 +56,12 @@ body {
       }
     nav { 
       position: sticky;
-      top: 2px;
+      top: 0.1rem;
       width: 100%;
       box-sizing: border-box;
       margin: 0;
-      background: radial-gradient(#BFD6E2 1px, rgba(255,255,255,0) 3px);
-      background-size: 10px 10px;
+      background: radial-gradient(#678493 0.05rem, rgba(255,255,255,0.5) 0.2rem);
+      background-size: 1rem 1rem;
       }
     
     nav > ul {
@@ -81,7 +81,7 @@ body {
       }
     .topmenu {
       backface-visibility: hidden;
-      background: rgba(255,255,255,.8);
+      background: rgba(255,255,255,0.8);
       }
     .topmenu > li {
       display: inline-block;
@@ -90,16 +90,16 @@ body {
       }
     .topmenu > li > a {
       font-family: 'Exo 2', sans-serif;
-      height: 50px;
-      line-height: 50px;
-      padding: 0 30px;
+      height: 3.2rem;
+      line-height: 3.2rem;
+      padding: 0 1.9rem;
       font-weight: bold;
       color: #003559;
       text-transform: uppercase;
       }
     .down:after {
       content: "\f107";
-      margin-left: 8px;
+      margin-left: 0.5rem;
       font-family: FontAwesome;
       }
     .topmenu li a:hover, .topmenu .active {
@@ -110,7 +110,7 @@ body {
       flex-direction: column; 
       list-style: none;
       background: white;
-      border: 5px solid #003559; 
+      border: 0.3rem solid #003559; 
       border-radius: 5%;
       position: absolute;
       left: 0;
@@ -125,7 +125,7 @@ body {
     .topmenu > li:hover .submenu{
       visibility: visible;
       opacity: 1;
-      transform: perspective(600px) rotateX(0deg);
+      transform: perspective(37.5rem) rotateX(0deg);
       }
     .submenu li a { 
       display: flex; 
