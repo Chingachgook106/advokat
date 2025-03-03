@@ -172,6 +172,9 @@ section {
     color: #072940;
     font-family: 'Exo 2', sans-serif; 
     font-size: large; 
+  } 
+  .feedback { 
+    display: flex; 
   }
 form { 
   width: 500px; 
@@ -236,13 +239,11 @@ input:valid ~ label {
 input:focus ~ .bar :before, 
 input:focus ~ .bar :after { 
   width: 50%;
+} 
+#message { 
+  font-family: 'Exo 2', sans-serif;
+  color: #003559; 
 }
-table {
-	border:0px solid transparent;
-	}
-td {
-  background-color: LightCyan;
-  } 
 footer { 
   display: flex; 
   justify-content: space-between;
