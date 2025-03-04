@@ -4,10 +4,14 @@ function sendFile() {
   const formData = new FormData();
   formData.append('file', blob, 'message.txt');
 
-  fetch('https://vercel.com/yeliseis-projects/advokat-byfy/7fSMf7v82Thw6grr3aginyijfXEj/send-email', {
+  fetch('https://advokat-byfy.vercel.app/send-email', {
       method: 'POST',
-      body: formData
-  })
+      headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name, email, message }),
+});
+
   .then(response => response.text())
   .then(result => {
       alert(result);

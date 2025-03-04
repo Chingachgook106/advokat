@@ -5,10 +5,14 @@ const fs = require('fs');
 const path = require('path'); 
 const cors = require('cors'); // Подключение cors
 
+app.use(cors({
+    origin: 'https://advokat-byfy.vercel.app', // Укажи URL фронтенда
+    methods: ['POST'], // Разрешённые методы
+    allowedHeaders: ['Content-Type'] // Разрешённые заголовки
+}));
 const app = express();
 // const PORT = process.env.PORT || 3000; 
-const PORT = 3000;
-app.use(cors()); 
+const PORT = 3000; 
 app.use(express.static(path.join(__dirname, '/')));
 
 const upload = multer({ dest: 'upload/' });
