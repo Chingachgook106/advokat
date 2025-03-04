@@ -2,10 +2,13 @@ const express = require('express');
 const multer = require('multer');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
-const path = require('path');
+const path = require('path'); 
+const cors = require('cors'); // Подключение cors
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; 
+
+app.use(cors()); 
 
 const upload = multer({ dest: path.join(__dirname, '../upload') });
 
@@ -23,7 +26,7 @@ app.post('/send-email', upload.single('file'), (req, res) => {
 
     const mailOptions = {
         from: process.env.GMAIL_USER,
-        to: 'recipient-email@gmail.com',
+        to: process.env.RECIPIENT_EMAIL,
         subject: 'Новое сообщение с сайта',
         text: 'Пользователь отправил сообщение.',
         attachments: [
