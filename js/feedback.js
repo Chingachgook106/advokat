@@ -4,7 +4,7 @@ function sendFile() {
   const formData = new FormData();
   formData.append('file', blob, 'message.txt');
 
-  fetch('https://vercel.com/yeliseis-projects/advokat-eh2r/CWGtDRgJR6NfkSNS7LkkhQbi7Fc2/send-email', {
+  fetch('https://vercel.com/yeliseis-projects/advokat-byfy/7fSMf7v82Thw6grr3aginyijfXEj/send-email', {
       method: 'POST',
       body: formData
   })
