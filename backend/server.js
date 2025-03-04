@@ -6,11 +6,12 @@ const path = require('path');
 const cors = require('cors'); // Подключение cors
 
 const app = express();
-const PORT = process.env.PORT || 3000; 
-
+// const PORT = process.env.PORT || 3000; 
+const PORT = 3000;
 app.use(cors()); 
+app.use(express.static(path.join(__dirname, '/')));
 
-const upload = multer({ dest: path.join(__dirname, '../upload') });
+const upload = multer({ dest: 'upload/' });
 
 // Настройка Nodemailer
 const transporter = nodemailer.createTransport({
@@ -21,8 +22,12 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 app.post('/send-email', upload.single('file'), (req, res) => {
-    const filePath = path.join(__dirname, '../upload', req.file.filename);
+    const filePath = path.join(__dirname, 'upload', req.file.filename);
 
     const mailOptions = {
         from: process.env.GMAIL_USER,

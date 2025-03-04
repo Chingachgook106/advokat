@@ -1,4 +1,8 @@
 {
+  "name": "advokat-project",
+  "version": "1.0.0",
+  "description": "Учебный проект для отправки сообщений на почту",
+  "main": "backend/server.js",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.2",
@@ -7,6 +11,11 @@
   },
   "scripts": {
     "start": "node backend/server.js",
-    "build": "echo 'Сборка отсутствует для бэкенда, запуск не требуется'"
+    "build": "echo 'Сборка отсутствует для бэкенда, запуск не требуется'",
+    "install-all": "npm install",
+    "dev": "nodemon backend/server.js"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
