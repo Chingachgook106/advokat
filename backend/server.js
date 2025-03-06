@@ -32,7 +32,7 @@ const transporter = nodemailer.createTransport({
 });
 
 app.post('/send-email', upload.single('file'), (req, res) => { 
-    console.log('Текущий хост: ', req.headers.host);
+    console.log('Получен POST-запрос!');
     
     if (!req.file) {
         return res.status(400).send('Файл не выбран!');
