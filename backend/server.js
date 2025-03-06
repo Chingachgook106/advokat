@@ -3,19 +3,24 @@ const multer = require('multer');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path'); 
-const cors = require('cors'); // Подключение cors
+const cors = require('cors');
+
+const app = express(); 
+
+const uploadDir = path.join(__dirname, 'upload');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
 
 app.use(cors({
     origin: 'https://advokat-byfy.vercel.app', // Укажи URL фронтенда
-    methods: ['POST'], // Разрешённые методы
-    allowedHeaders: ['Content-Type'] // Разрешённые заголовки
+    methods: ['POST', 'GET'],
+    allowedHeaders: ['Content-Type'] 
 }));
-const app = express();
-// const PORT = process.env.PORT || 3000; 
-const PORT = 3000; 
+
 app.use(express.static(path.join(__dirname, '/')));
 
-const upload = multer({ dest: 'upload/' });
+const upload = multer({ dest: '/tmp/' });
 
 // Настройка Nodemailer
 const transporter = nodemailer.createTransport({
@@ -26,42 +31,41 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
 app.post('/send-email', upload.single('file'), (req, res) => {
-    const filePath = path.join(__dirname, 'upload', req.file.filename);
+    if (!req.file) {
+        return res.status(400).send('Файл не выбран!');
+    }
 
-    const mailOptions = {
-        from: process.env.GMAIL_USER,
-        to: process.env.RECIPIENT_EMAIL,
-        subject: 'Новое сообщение с сайта',
-        text: 'Пользователь отправил сообщение.',
-        attachments: [
-            {
-                filename: 'message.txt',
-                path: filePath
-            }
-        ]
-    };
+const filePath = req.file.path;
 
-    transporter.sendMail(mailOptions, (err, info) => {
-        if (err) {
-            return res.status(500).send('Ошибка отправки email.');
+const mailOptions = {
+    from: process.env.GMAIL_USER,
+    to: process.env.RECIPIENT_EMAIL,
+    subject: 'Новое сообщение с сайта',
+    text: 'Пользователь отправил сообщение.',
+    attachments: [{
+        filename: 'message.txt',
+        path: filePath
+    }]
+};
+
+transporter.sendMail(mailOptions, (err, info) => {
+    if (err) {
+        console.error('Ошибка Nodemailer:', err);
+        return res.status(500).send('Ошибка отправки email.');
+    }
+
+    fs.unlink(filePath, (unlinkErr) => {
+        if (unlinkErr) {
+        console.error('Ошибка удаления файла:', unlinkErr);
+        return res.status(500).send('Файл не удалён, но сообщение отправлено.');
         }
-        
-        // Удаляем файл после отправки
-        fs.unlink(filePath, (unlinkErr) => {
-            if (unlinkErr) {
-                console.error('Ошибка удаления файла:', unlinkErr);
-            }
-        });
-
         res.send('Сообщение успешно отправлено.');
+    });
     });
 });
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Сервер запущен на порту ${PORT}`);
 });
