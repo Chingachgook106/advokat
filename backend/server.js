@@ -13,9 +13,9 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 app.use(cors({
-    origin: 'https://advokat-byfy.vercel.app', // Укажи URL фронтенда
+    origin: process.env.CORS_ORIGIN, // Укажи URL фронтенда
     methods: ['POST', 'GET'],
-    allowedHeaders: ['Content-Type'] 
+    credentials: true
 }));
 
 app.use(express.static(path.join(__dirname, '/')));
@@ -31,7 +31,9 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-app.post('/send-email', upload.single('file'), (req, res) => {
+app.post('/send-email', upload.single('file'), (req, res) => { 
+    console.log('Текущий хост: ', req.headers.host);
+    
     if (!req.file) {
         return res.status(400).send('Файл не выбран!');
     }
