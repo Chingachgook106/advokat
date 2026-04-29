@@ -11,7 +11,7 @@ body {
   box-sizing: border-box;   
   } 
   .header { 
-    height: 35rem;
+    height: 92vh;
     background-image: url(../images/still-life-with-scales-justiceFHD.jpg);  
     background-repeat: no-repeat; 
     background-size: 100%; 
@@ -147,15 +147,22 @@ article {
   } 
   .wrapper { 
     display: flex; 
-    justify-content: space-around;   
+    justify-content: space-between;  
+    gap: 30px; /* Отступ между колонками */
+    width: 1200px; /* Пример ширины для десктопа */
+    margin: 0 auto; 
     }
 section { 
-  display: inline-block;
-  width: 25%; 
+  flex-basis: 31%;
+  /* display: inline-block; */
+  /* width: 25%;  */
   border: 1px solid #333;
   box-shadow: 8px 8px 5px #444;
   background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
   } 
+  .scroll-btn { 
+      display: none; 
+  }
   .specializations { 
     padding-left: 2vw;
     list-style: none; 
@@ -177,8 +184,8 @@ section {
     display: flex; 
   }
 form { 
-  width: 500px; 
-  margin: 50px 100px;
+  width: 20%; 
+  margin: 5vh 10vw;
 } 
 .form-group { 
   position: relative; 
@@ -246,7 +253,7 @@ input:focus ~ .bar :after {
 }
 footer { 
   display: flex; 
-  justify-content: space-between;
+  justify-content: center;
   font-family: 'Exo 2', sans-serif;
   color: #003559;
 } 
@@ -263,13 +270,13 @@ footer h2 {
   display: inline-block; 
   margin-bottom: 1vw; 
   padding-top: 3vh;
-  width: 40%; 
+  width: 30vw; 
   text-align: center;
 } 
 .links { 
   display: flex; 
   padding-right: 3%;
-  width: 30%; 
+  width: 30vw; 
   align-items: center;
   justify-content: space-around; 
 } 
@@ -298,3 +305,69 @@ footer h2 {
   left: calc(50% - 10vw); 
   bottom: 2vw;
 } 
+
+@media (max-width: 992px) {
+  
+  .slider-container {
+    position: relative;     
+    margin: 30px auto; 
+    max-width: 100%; 
+  }
+
+  .wrapper { 
+    width: 100%; 
+    display: flex;
+    flex-wrap: nowrap; 
+    overflow-x: scroll; 
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .wrapper::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+  }
+
+  /* Улучшение UX: прокрутка будет "прилипать" к началу колонок */
+  .wrapper {
+    scroll-snap-type: x mandatory; /* Обязательная привязка к оси X */
+    scroll-behavior: smooth; /* Плавность для JS-прокрутки */
+  }
+
+  .column {
+    /* Каждая колонка занимает 90% ширины экрана */
+    /* Это создает эффект "подглядывания" соседних колонок */
+    flex: 0 0 90%; 
+    
+    /* Центрируем колонку при "прилипании" */
+    scroll-snap-align: center;
+  }
+  
+  /* Первой и последней колонке добавим отступ, чтобы они тоже могли встать по центру */
+  #column-1 { margin-left: 5%; }
+  #column-3 { margin-right: 5%; }
+
+
+  /* Стилизуем и показываем кнопки */
+  .scroll-btn {
+    display: block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%); 
+    z-index: 10;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+  }
+
+  #scroll-left {
+    left: 10px;
+  }
+
+  #scroll-right {
+    right: 10px;
+  }
+}
