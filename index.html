@@ -89,24 +89,22 @@
 			<aside></aside> 
 		</main> 
 		<div class="feedback">
-			<form action="">
-				<div class="form-group">
-					<input type="text" name="name" required />
-					<span class="highlight"></span>
-					<span class="bar"></span>
-					<label for="name">Введите Ваше имя</label>
-				</div>
-				<div class="form-group">
-					<input type="text" name="email" required />
-					<span class="highlight"></span>
-					<span class="bar"></span>
-					<label for="email">Введите почтовый адрес</label>
-				</div>
-			</form> 		
-			<form id="messageForm">
-				<input type="text" id="message" placeholder="Введите сообщение" required>
-				<button type="button" onclick="sendFile()">Отправить сообщение</button>
-			</form> 
+			<form id="feedbackForm">
+    <!-- Поля вдвое уже (35% экрана) -->
+        <div class="form-group">
+            <input type="text" id="userName" name="name" />
+            <label for="userName">Введите Ваше имя</label>
+        </div>
+        <div class="form-group">
+            <input type="email" id="userEmail" name="email" />
+            <label for="userEmail">Введите почтовый адрес</label>
+        </div>
+
+        <!-- Основное поле (70% экрана) -->
+        <textarea id="message" placeholder="Введите сообщение" required></textarea>
+        
+        <button type="button" onclick="sendData()">Отправить сообщение</button>
+</form> 
 		</div>
 	</body> 
 	<footer>

@@ -145,13 +145,22 @@ article {
   font-weight: bold;  
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
   } 
-  .wrapper { 
+  /* .wrapper { 
     display: flex; 
     justify-content: space-between;  
-    gap: 30px; /* Отступ между колонками */
-    width: 1200px; /* Пример ширины для десктопа */
+    gap: 30px; /* Отступ между колонками 
+    width: 1200px; /* Пример ширины для десктопа 
     margin: 0 auto; 
-    }
+    }*/
+
+.wrapper {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
 section { 
   flex-basis: 31%;
   /* display: inline-block; */
@@ -160,6 +169,16 @@ section {
   box-shadow: 8px 8px 5px #444;
   background-image: linear-gradient(180deg, #fff, #ddd 40%, #ccc);
   } 
+  /* 1. Шрифт только для блока column-3 */
+
+.column {
+    scroll-snap-align: center; /* Центрирует колонку при остановке скролла */
+    /* Ширина (flex) остается твоя оригинальная */
+    }
+#column-3 {
+    font-family: sans-serif;
+    /* Размер шрифта и интервал не меняются, наследуются текущие */
+}
   .scroll-btn { 
       display: none; 
   }
@@ -182,19 +201,36 @@ section {
   } 
   .feedback { 
     display: flex; 
-  }
+    flex-direction: column;
+    align-items: center; /* Центрируем форму на экране */
+    width: 100%
+  } 
+  #feedbackForm {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Все поля внутри ровняем по левому краю */
+    width: 70%; /* Основное поле занимает 70% экрана */
+} 
+
 form { 
   width: 20%; 
   margin: 5vh 10vw;
 } 
 .form-group { 
-  position: relative; 
-  margin-bottom: 45px; 
+  width: 50%; /* 50% от родителя (70%), то есть 35% от экрана */
+  margin-bottom: 15px; 
 } 
 .form-group label { 
   font-family: 'Exo 2', sans-serif;
   color: #003559; 
-}
+} 
+
+.form-group input {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: sans-serif; /* Тот же шрифт, что в column-3 */
+} 
+
 input { 
   display: block;
   width: 300px; 
@@ -247,9 +283,17 @@ input:focus ~ .bar :before,
 input:focus ~ .bar :after { 
   width: 50%;
 } 
+
+#feedbackForm button {
+    margin-top: 10px;
+} 
+
 #message { 
-  font-family: 'Exo 2', sans-serif;
-  color: #003559; 
+  width: 100%; /* Занимает все 70% ширины формы */
+  box-sizing: border-box;
+  font-family: sans-serif; /* Тот же шрифт, что в column-3 */
+  min-height: 100px;
+  resize: vertical;
 }
 footer { 
   display: flex; 
@@ -310,64 +354,44 @@ footer h2 {
   
   .slider-container {
     position: relative;     
-    margin: 30px auto; 
-    max-width: 100%; 
+    width: 100vw; /* Занимаем всю ширину экрана */
+    margin-left: calc(-50vw + 50%); /* Хак для выравнивания, если родитель зажат */
+    overflow: hidden;
   }
 
   .wrapper { 
-    width: 100%; 
     display: flex;
-    flex-wrap: nowrap; 
-    overflow-x: scroll; 
-    scrollbar-width: none; /* Firefox */
+    width: 100%;
+    gap: 15px; /* Небольшой зазор между колонками */
+    overflow-x: auto; /* Включаем горизонтальный скролл */
+    scroll-snap-type: x mandatory; /* ВКЛЮЧАЕМ МАГНИТ */
+    padding: 20px 0;
+    scrollbar-width: none; /* Убираем полосу прокрутки Firefox */
   }
   
   .wrapper::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
-  }
-
-  /* Улучшение UX: прокрутка будет "прилипать" к началу колонок */
-  .wrapper {
-    scroll-snap-type: x mandatory; /* Обязательная привязка к оси X */
-    scroll-behavior: smooth; /* Плавность для JS-прокрутки */
+    display: none; /* Убираем полосу прокрутки Chrome/Safari */
   }
 
   .column {
-    /* Каждая колонка занимает 90% ширины экрана */
-    /* Это создает эффект "подглядывания" соседних колонок */
-    flex: 0 0 90%; 
-    
-    /* Центрируем колонку при "прилипании" */
-    scroll-snap-align: center;
+    flex: 0 0 85%; /* Колонка занимает 85% ширины, чтобы был виден край следующей */
+    scroll-snap-align: center; /* Центрируем колонку при остановке скролла */
+    margin: 0;
+    /* Убедись, что нет жестких width: 1200px для .column */
   }
-  
-  /* Первой и последней колонке добавим отступ, чтобы они тоже могли встать по центру */
-  #column-1 { margin-left: 5%; }
-  #column-3 { margin-right: 5%; }
 
+  /* Добавим пустые отступы по краям, чтобы первая и последняя колонки были по центру */
+  .wrapper::before,
+  .wrapper::after {
+    content: '';
+    flex: 0 0 7.5%; /* Половина от оставшихся 15% (100-85) */
+  }
 
-  /* Стилизуем и показываем кнопки */
+  /* Кнопки прокрутки — сделаем их чуть заметнее на тач-скринах */
   .scroll-btn {
-    display: block;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%); 
-    z-index: 10;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    font-size: 28px;
-    cursor: pointer;
-  }
-
-  #scroll-left {
-    left: 10px;
-  }
-
-  #scroll-right {
-    right: 10px;
+    display: flex; /* Показываем */
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
   }
 }
