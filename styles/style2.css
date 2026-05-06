@@ -1,0 +1,167 @@
+:root {
+  --container-gap: 1rem;
+  --section-padding: 2rem;
+  --max-width: 1200px;
+  --accent-color: #007bff;/* TODO: проверить вызовы --accent-color. Если нет var() или чтения в JS — удалить */
+}
+
+/* Базовый сброс */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  color: #333;
+}
+
+/* Layout */
+header, nav, main, footer, .feedback {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-gap);
+}
+
+/* Навигация */
+.topmenu {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 1rem 0;
+}
+
+.submenu {
+  display: none; /* Для упрощения, в реальном проекте здесь будет позиционирование */
+}
+
+/* --- СЛАЙДЕР (Mobile First) --- */
+
+.slider-container {
+  position: relative;
+  margin: 2rem 0; 
+  /*padding: 0;  Убираем падинг, чтобы элементы прижимались к краям при скролле */
+  scroll-padding-inline: 1rem;  /*Исправленная мной строка с ненулевым отступом*/
+}
+
+.slider-track {
+  display: flex;
+  overflow-x: auto; 
+  gap: 1rem;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+    
+  /* Прячем скроллбар */
+  scrollbar-width: none; 
+} 
+
+.slider-track::before,
+.slider-track::after {
+  content: '';
+  flex: 0 0 10%;
+}
+
+.slider-track::-webkit-scrollbar {
+  display: none;
+}
+
+.column {
+  flex: 0 0 80%; /* Ширина элемента 80% */
+  margin-right: 0;
+  scroll-snap-align: center;
+  
+  /* Визуальный стиль для наглядности */
+  min-height: 300px;
+  background: #f0f0f0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Чтобы последний элемент не имел отступа */
+.column:last-child {
+  margin-right: 0;
+}
+
+/* Кнопки скролла на мобилках часто скрывают или делают декоративными */
+.scroll-btn {
+  display: none; 
+}
+
+/* --- FORM & FEEDBACK --- */
+.feedback form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 500px;
+  margin: 2rem 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+input, textarea {
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+}
+
+/* --- DESKTOP ADAPTATION --- */
+
+@media (min-width: 1024px) {
+  .slider-container {
+    padding: 0; 
+    grid-column: 1 / -1; /* Объединил два объявления .slider-container в один блок */
+  }
+
+  .slider-track {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 колонки */
+    gap: 2rem;
+    overflow: visible; /* Отключаем скролл */
+    scroll-snap-type: none; 
+    align-items: stretch; /* 🔑 Новое: все колонки в ряду принимают высоту самой высокой */
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-right: 0;
+    min-height: 0; /* 🔑 Новое: без этого Grid не даст колонке сжаться, и скролл не сработает */
+    align-items: flex-start; /* Сбрасываем мобильное центрирование контента */
+    justify-content: flex-start;
+    padding: 1.5rem; /* Внутренний отступ для всех трёх колонок */
+  } 
+   
+  /* Кастомный скроллбар только для правой колонки */
+  #column-3::-webkit-scrollbar { width: 6px; }
+  #column-3::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+  #column-3 { scrollbar-width: thin; scrollbar-color: #ccc transparent; }
+
+  .scroll-btn {
+    display: none;
+  }
+  
+  main {
+    display: grid;
+    grid-template-columns: 1fr 300px; /* Адаптация под aside */
+    gap: 2rem;
+  }
+
+  footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+}
