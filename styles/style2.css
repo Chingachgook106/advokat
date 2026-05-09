@@ -142,7 +142,7 @@ input, textarea {
     justify-content: flex-start;
     padding: 1.5rem; /* Внутренний отступ для всех трёх колонок */
   } 
-   
+    
   /* Кастомный скроллбар только для правой колонки */
   #column-3::-webkit-scrollbar { width: 6px; }
   #column-3::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
