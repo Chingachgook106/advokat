@@ -2,7 +2,7 @@
   --container-gap: 1rem;
   --section-padding: 2rem;
   --max-width: 1200px;
-  --accent-color: #007bff;/* TODO: проверить вызовы --accent-color. Если нет var() или чтения в JS — удалить */
+  /* --accent-color: #007bff;TODO: проверить вызовы --accent-color. Если нет var() или чтения в JS — удалить */
 }
 
 /* Базовый сброс */
@@ -24,6 +24,69 @@ header, nav, main, footer, .feedback {
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--container-gap);
+} 
+
+
+.header {
+  /* Вариант А: Жесткое следование пропорциям кадра 16:9 */
+  width: 100%;
+  aspect-ratio: 16 / 9; 
+  
+  /* Фоновое изображение без наложений и параллакса */
+  background-image: url('../images/still-life-with-scales-justiceFHD.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  
+  /* Композиция: Левый верхний угол */
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  
+  /* Отступы по твоему запросу (относительно ширины блока) */
+  padding-top: 7%; 
+  padding-left: 4%;
+  
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.title-group {
+  display: flex;
+  flex-direction: column;
+  color: #4A1A13; /* Выбери цвет под свою обработку фото */
+}
+
+.main-title {
+  display: flex;
+  align-items: flex-start; /* Выравнивание по верхнему краю */
+  /* gap: 0.1rem; Отступ между буквой и текстом */
+  margin-bottom: 0.5rem;
+}
+
+/* Стилизация буквицы-SVG */
+.drop-cap {
+  /* Увеличиваем размер: 2.8em сделает букву высотой почти в две строки */
+  height: 2.8em; 
+  width: auto;
+  flex-shrink: 0;
+  
+  /* Смещение: если нужно приподнять или опустить букву относительно текста */
+  transform: translateY(5%);
+}
+
+.title-text {
+  /* Уменьшаем шрифт текста на 1-2 единицы относительно h1 */
+  font-size: 0.8em; 
+  line-height: 1.1;
+  text-transform: uppercase;
+  display: inline-block;
+  padding-top: 0.2em; /* Ювелирное выравнивание текста под шапку буквы */
+}
+
+.back-string {
+  /* Чтобы нижние строки не прилипали к огромной букве Ю */
+  padding-left: 0.5%; 
 }
 
 /* Навигация */
@@ -60,10 +123,17 @@ header, nav, main, footer, .feedback {
   scrollbar-width: none; 
 } 
 
-.slider-track::before,
-.slider-track::after {
-  content: '';
-  flex: 0 0 10%;
+.slider-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  /* 🔑 Замена ::before/::after */
+  padding-inline: 1rem;             /* или var(--container-gap) */
+  scroll-padding-inline: 1rem;      /* должно совпадать с padding-inline */
 }
 
 .slider-track::-webkit-scrollbar {
@@ -118,6 +188,9 @@ input, textarea {
 /* --- DESKTOP ADAPTATION --- */
 
 @media (min-width: 1024px) {
+  .back-string br {
+    display: none;
+  }
   .slider-container {
     padding: 0; 
     grid-column: 1 / -1; /* Объединил два объявления .slider-container в один блок */
@@ -130,6 +203,8 @@ input, textarea {
     overflow: visible; /* Отключаем скролл */
     scroll-snap-type: none; 
     align-items: stretch; /* 🔑 Новое: все колонки в ряду принимают высоту самой высокой */
+    /* padding-inline: 0;
+    scroll-padding-inline: 0; */
   }
 
   .column {
