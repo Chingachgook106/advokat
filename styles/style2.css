@@ -44,7 +44,7 @@ header, nav, main, footer, .feedback {
   justify-content: flex-start;
   
   /* Отступы по твоему запросу (относительно ширины блока) */
-  padding-top: 7%; 
+  padding-top: 1%; 
   padding-left: 4%;
   
   box-sizing: border-box;
@@ -57,36 +57,61 @@ header, nav, main, footer, .feedback {
   color: #4A1A13; /* Выбери цвет под свою обработку фото */
 }
 
+.fil0 { fill: #4A1A13; } /* Основной темный цвет */
+.fil1 { fill: #D4AF37; } /* Золотистый/акцентный цвет */
+.str0 { stroke: #4A1A13; stroke-width: 0.5; }
+
+/* Главный контейнер: две строки друг под другом */
 .main-title {
   display: flex;
-  align-items: flex-start; /* Выравнивание по верхнему краю */
-  /* gap: 0.1rem; Отступ между буквой и текстом */
-  margin-bottom: 0.5rem;
+  flex-direction: column;
+  align-items: flex-start;      /* Выравнивание по левому краю */
+  gap: 0.05em;                   /* Расстояние между строками (регулируемый параметр!) */
+  line-height: 0.2;
 }
 
-/* Стилизация буквицы-SVG */
+/* Строка 1: буква + слово в одну линию */
+.title-line-1 {
+  display: flex;
+  align-items: center; /* Базовое выравнивание по центру */
+  /* gap: 0.2em; Отступ между SVG и текстом */
+}
+
+/* SVG: буква «Ю» */
 .drop-cap {
-  /* Увеличиваем размер: 2.8em сделает букву высотой почти в две строки */
-  height: 2.8em; 
+  height: 1.5em; 
   width: auto;
-  flex-shrink: 0;
+  flex-shrink: 0; /* Запрещаем сжатие, размеры фиксированы */
   
-  /* Смещение: если нужно приподнять или опустить букву относительно текста */
-  transform: translateY(5%);
+  /* Тонкая подгонка положения относительно текста */
+  transform: translateY(20%); /* Подбери от -15% до +5% под свой шрифт */
 }
 
-.title-text {
-  /* Уменьшаем шрифт текста на 1-2 единицы относительно h1 */
-  font-size: 0.8em; 
-  line-height: 1.1;
-  text-transform: uppercase;
-  display: inline-block;
-  padding-top: 0.2em; /* Ювелирное выравнивание текста под шапку буквы */
+/* Строка 2: второе слово */
+.title-line-2 {
+  /* Опционально: сдвиг вправо относительно первой строки */
+  padding-left: calc(4.1em + 0.2em); /* ширина буквы + gap из .title-line-1 */
+  /* Или: margin-left: 2em; — если нужно проще */
+}
+
+/* Общее для слов */
+.title-word {
+  white-space: nowrap; /* Запрет переноса внутри слова */
+}
+
+.back-string-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Выравнивание по левому краю */
+  padding-left: 2%;
+  padding-top: 3%;
 }
 
 .back-string {
-  /* Чтобы нижние строки не прилипали к огромной букве Ю */
-  padding-left: 0.5%; 
+  margin: 0;
+  font-size: clamp(0.9rem, 2.5vw, 1.4rem);
+  line-height: 1.2;
+  text-align: left;
 }
 
 /* Навигация */
