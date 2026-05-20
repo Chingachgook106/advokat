@@ -1,11 +1,13 @@
+/* --- ОСНОВНЫЕ ПЕРЕМЕННЫЕ --- */
 :root {
   --container-gap: 1rem;
-  --section-padding: 2rem;
   --max-width: 1200px;
-  /* --accent-color: #007bff;TODO: проверить вызовы --accent-color. Если нет var() или чтения в JS — удалить */
+  --header-color: #4A1A13;
+  --accent-gold: #D4AF37;
+  --transition-speed: 0.3s;
 }
 
-/* Базовый сброс */
+/* --- СБРОС И БАЗОВЫЕ СТИЛИ --- */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -16,186 +18,192 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   color: #333;
+  overflow-x: hidden;
 }
 
-/* Layout */
+/* Общий контейнер для всех секций */
 header, nav, main, footer, .feedback {
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
   padding: 0 var(--container-gap);
-} 
+}
 
-
+/* --- HEADER (MOBILE FIRST) --- */
 .header {
-  /* Вариант А: Жесткое следование пропорциям кадра 16:9 */
   width: 100%;
-  aspect-ratio: 16 / 9; 
-  
-  /* Фоновое изображение без наложений и параллакса */
+  aspect-ratio: 16 / 9; /* Жесткое сохранение кадра 16:9 */
   background-image: url('../images/still-life-with-scales-justiceFHD.webp');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  background-attachment: scroll; /* Никакого параллакса для сохранения привязки */
   
-  /* Композиция: Левый верхний угол */
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   
-  /* Отступы по твоему запросу (относительно ширины блока) */
-  padding-top: 1%; 
+  padding-top: 3%;
   padding-left: 4%;
-  
-  box-sizing: border-box;
-  overflow: hidden;
 }
 
 .title-group {
   display: flex;
   flex-direction: column;
-  color: #4A1A13; /* Выбери цвет под свою обработку фото */
+  color: var(--header-color);
 }
 
-.fil0 { fill: #4A1A13; } /* Основной темный цвет */
-.fil1 { fill: #D4AF37; } /* Золотистый/акцентный цвет */
-.str0 { stroke: #4A1A13; stroke-width: 0.5; }
+/* SVG Цвета (через классы из вашего HTML) */
+.fil0 { fill: var(--header-color); }
+.fil1 { fill: var(--accent-gold); }
+.str0 { stroke: var(--header-color); stroke-width: 0.5; }
 
-/* Главный контейнер: две строки друг под другом */
+/* Масштабируемый заголовок */
 .main-title {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;      /* Выравнивание по левому краю */
-  gap: 0.05em;                   /* Расстояние между строками (регулируемый параметр!) */
-  line-height: 0.2;
+  align-items: flex-start;
+  line-height: 1; /* Оптимально для стыковки строк */
+  /* Плавный рост шрифта всего блока заголовка */
+  font-size: clamp(1.2rem, 5vw, 3rem); 
+  margin-bottom: 0.4em;
 }
 
-/* Строка 1: буква + слово в одну линию */
 .title-line-1 {
   display: flex;
-  align-items: center; /* Базовое выравнивание по центру */
-  /* gap: 0.2em; Отступ между SVG и текстом */
+  align-items: center;
+  /* gap: 0.1em; */
 }
 
-/* SVG: буква «Ю» */
 .drop-cap {
-  height: 1.5em; 
+  height: 1.5em; /* Все размеры привязаны к font-size h1 через em */
   width: auto;
-  flex-shrink: 0; /* Запрещаем сжатие, размеры фиксированы */
-  
-  /* Тонкая подгонка положения относительно текста */
-  transform: translateY(20%); /* Подбери от -15% до +5% под свой шрифт */
+  flex-shrink: 0;
+  transform: translateY(10%); /* Ювелирное позиционирование буквицы */
 }
 
-/* Строка 2: второе слово */
-.title-line-2 {
-  /* Опционально: сдвиг вправо относительно первой строки */
-  padding-left: calc(4.1em + 0.2em); /* ширина буквы + gap из .title-line-1 */
-  /* Или: margin-left: 2em; — если нужно проще */
-}
-
-/* Общее для слов */
 .title-word {
-  white-space: nowrap; /* Запрет переноса внутри слова */
+  text-transform: uppercase;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
+.title-line-2 {
+  /* Базовый сдвиг второй строки на мобильных */
+  padding-left: calc(4.5em + 0.1em); 
+}
+
+/* Уточняющие строки */
 .back-string-group {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Выравнивание по левому краю */
-  padding-left: 2%;
-  padding-top: 3%;
+  align-items: flex-start;
+  padding-left: 3%;
 }
 
 .back-string {
   margin: 0;
-  font-size: clamp(0.9rem, 2.5vw, 1.4rem);
+  /* Пропорциональный рост вспомогательного текста */
+  font-size: clamp(0.9rem, 3vw, 1.8rem); 
   line-height: 1.2;
   text-align: left;
+  font-weight: 700;
 }
 
-/* Навигация */
+/* --- ПРОМЕЖУТОЧНАЯ АДАПТАЦИЯ (550px+) --- */
+@media (min-width: 550px) {
+  .title-line-2 {
+    /* Увеличение "воздуха" между словами по вашей логике (п.1) */
+    padding-left: calc(2.5em + 0.1em); 
+    transition: padding-left var(--transition-speed);
+  }
+}
+
+/* --- DESKTOP ADAPTATION (1024px+) --- */
+@media (min-width: 1024px) {
+  .header {
+    max-height: 95vh; /* Предохранитель высоты (п.2) */
+    padding-top: 2%;  /* Чуть больше отступ на ПК для баланса */
+  }
+
+  .title-line-2 {
+    /* Максимальный сдвиг для широких экранов */
+    padding-left: calc(2.5em + 0.1em);
+  }
+}
+
+/* --- НАВИГАЦИЯ --- */
 .topmenu {
   display: flex;
   list-style: none;
   gap: 1.5rem;
   overflow-x: auto;
   padding: 1rem 0;
+  border-bottom: 1px solid #eee;
 }
 
-.submenu {
-  display: none; /* Для упрощения, в реальном проекте здесь будет позиционирование */
+.topmenu a {
+  text-decoration: none;
+  color: #666;
+  font-weight: 500;
+  transition: color var(--transition-speed);
 }
 
-/* --- СЛАЙДЕР (Mobile First) --- */
+.topmenu a.active, .topmenu a:hover {
+  color: var(--header-color);
+}
 
+.submenu { display: none; } /* Для будущей проработки */
+
+/* --- СЛАЙДЕР --- */
 .slider-container {
   position: relative;
-  margin: 2rem 0; 
-  /*padding: 0;  Убираем падинг, чтобы элементы прижимались к краям при скролле */
-  scroll-padding-inline: 1rem;  /*Исправленная мной строка с ненулевым отступом*/
+  margin: 2rem 0;
 }
-
-.slider-track {
-  display: flex;
-  overflow-x: auto; 
-  gap: 1rem;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-    
-  /* Прячем скроллбар */
-  scrollbar-width: none; 
-} 
 
 .slider-track {
   display: flex;
   overflow-x: auto;
+  gap: 1.5rem;
   scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
+  padding-inline: var(--container-gap);
+  scroll-padding-inline: var(--container-gap);
   scrollbar-width: none;
-
-  /* 🔑 Замена ::before/::after */
-  padding-inline: 1rem;             /* или var(--container-gap) */
-  scroll-padding-inline: 1rem;      /* должно совпадать с padding-inline */
 }
 
-.slider-track::-webkit-scrollbar {
-  display: none;
-}
+.slider-track::-webkit-scrollbar { display: none; }
 
 .column {
-  flex: 0 0 80%; /* Ширина элемента 80% */
-  margin-right: 0;
+  flex: 0 0 85%;
   scroll-snap-align: center;
-  
-  /* Визуальный стиль для наглядности */
-  min-height: 300px;
-  background: #f0f0f0;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  min-height: 350px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #eee;
 }
 
-/* Чтобы последний элемент не имел отступа */
-.column:last-child {
-  margin-right: 0;
+@media (min-width: 1024px) {
+  .slider-track {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    overflow: visible;
+    scroll-snap-type: none;
+    padding-inline: 0;
+  }
+  .column {
+    width: 100%;
+    flex: none;
+  }
 }
 
-/* Кнопки скролла на мобилках часто скрывают или делают декоративными */
-.scroll-btn {
-  display: none; 
-}
-
-/* --- FORM & FEEDBACK --- */
+/* --- ФОРМА ОБРАТНОЙ СВЯЗИ --- */
 .feedback form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-width: 500px;
-  margin: 2rem 0;
+  gap: 1.2rem;
+  max-width: 600px;
+  margin: 3rem 0;
 }
 
 .form-group {
@@ -204,64 +212,61 @@ header, nav, main, footer, .feedback {
 }
 
 input, textarea {
-  padding: 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
 }
 
-/* --- DESKTOP ADAPTATION --- */
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--header-color);
+}
 
-@media (min-width: 1024px) {
-  .back-string br {
-    display: none;
-  }
-  .slider-container {
-    padding: 0; 
-    grid-column: 1 / -1; /* Объединил два объявления .slider-container в один блок */
-  }
+button[type="submit"] {
+  background: var(--header-color);
+  color: white;
+  padding: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: opacity var(--transition-speed);
+}
 
-  .slider-track {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 колонки */
-    gap: 2rem;
-    overflow: visible; /* Отключаем скролл */
-    scroll-snap-type: none; 
-    align-items: stretch; /* 🔑 Новое: все колонки в ряду принимают высоту самой высокой */
-    /* padding-inline: 0;
-    scroll-padding-inline: 0; */
-  }
+button[type="submit"]:hover { opacity: 0.9; }
 
-  .column {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-right: 0;
-    min-height: 0; /* 🔑 Новое: без этого Grid не даст колонке сжаться, и скролл не сработает */
-    align-items: flex-start; /* Сбрасываем мобильное центрирование контента */
-    justify-content: flex-start;
-    padding: 1.5rem; /* Внутренний отступ для всех трёх колонок */
-  } 
-    
-  /* Кастомный скроллбар только для правой колонки */
-  #column-3::-webkit-scrollbar { width: 6px; }
-  #column-3::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
-  #column-3 { scrollbar-width: thin; scrollbar-color: #ccc transparent; }
+/* --- FOOTER --- */
+footer {
+  background: #f4f4f4;
+  padding: 3rem var(--container-gap);
+  display: grid;
+  gap: 2rem;
+  margin-top: 4rem;
+}
 
-  .scroll-btn {
-    display: none;
-  }
-  
-  main {
-    display: grid;
-    grid-template-columns: 1fr 300px; /* Адаптация под aside */
-    gap: 2rem;
-  }
+.adresses p, .adresses a {
+  display: block;
+  margin-bottom: 0.5rem;
+  text-decoration: none;
+  color: #333;
+}
 
+.links {
+  display: flex;
+  gap: 1rem;
+}
+
+.icon-link img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+@media (min-width: 768px) {
   footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding-top: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: start;
   }
 }
