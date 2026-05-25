@@ -133,32 +133,118 @@ header, nav, main, footer, .feedback {
 }
 
 /* --- НАВИГАЦИЯ --- */
+nav {
+  position: relative;
+  z-index: 10;
+}
+
 .topmenu {
   display: flex;
   list-style: none;
   gap: 1.5rem;
-  overflow-x: auto;
   padding: 1rem 0;
   border-bottom: 1px solid #eee;
+  /* Плавный скролл на мобильных */
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -webkit-overflow-scrolling: touch;
+}
+
+.topmenu::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+.topmenu li {
+  position: relative;
+  flex-shrink: 0;
 }
 
 .topmenu a {
   text-decoration: none;
   color: #666;
   font-weight: 500;
+  font-size: 0.95rem;
+  display: inline-block;
+  padding: 0.25rem 0;
   transition: color var(--transition-speed);
 }
 
-.topmenu a.active, .topmenu a:hover {
+.topmenu a.active, 
+.topmenu a:hover {
   color: var(--header-color);
 }
 
-.submenu { display: none; } /* Для будущей проработки */
+/* Выпадающее меню (Desktop Only) */
+@media (min-width: 768px) {
+  .topmenu {
+    overflow: visible;
+  }
+  
+  .topmenu li:hover .submenu,
+  .topmenu li:focus-within .submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .submenu {
+    display: block; /* Вместо none управляем через opacity для анимации */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 160px;
+    background: #ffffff;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    padding: 0.5rem 0;
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity var(--transition-speed), transform var(--transition-speed), visibility var(--transition-speed);
+  }
+
+  .submenu li {
+    width: 100%;
+  }
+
+  .submenu a {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    color: #555;
+  }
+
+  .submenu a:hover {
+    background-color: #fcfaf6;
+    color: var(--header-color);
+  }
+}
+
+/* --- СЕКЦИЯ КОНТЕНТА (ARTICLE) --- */
+article {
+  margin: 3rem 0;
+}
+
+article h2 {
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  color: var(--header-color);
+  margin-bottom: 1.2rem;
+  font-weight: 700;
+}
+
+article p {
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+  line-height: 1.7;
+  color: #4a4a4a;
+  margin-bottom: 1.5rem;
+}
 
 /* --- СЛАЙДЕР --- */
 .slider-container {
   position: relative;
-  margin: 2rem 0;
+  margin: 3rem 0;
 }
 
 .slider-track {
@@ -166,23 +252,62 @@ header, nav, main, footer, .feedback {
   overflow-x: auto;
   gap: 1.5rem;
   scroll-snap-type: x mandatory;
-  padding-inline: var(--container-gap);
+  padding: 0.5rem var(--container-gap);
   scroll-padding-inline: var(--container-gap);
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
-.slider-track::-webkit-scrollbar { display: none; }
+.slider-track::-webkit-scrollbar { 
+  display: none; 
+}
 
 .column {
   flex: 0 0 85%;
   scroll-snap-align: center;
-  min-height: 350px;
-  background: #f9f9f9;
+  min-height: 300px;
+  background: #fdfcf9;
   border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid #eee;
+  padding: 2rem;
+  border: 1px solid #f0e6d2;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
 }
 
+.column:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(74, 26, 19, 0.06);
+}
+
+/* Стилизация кнопок слайдера */
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e0d0b0;
+  color: var(--header-color);
+  padding: 0.6rem 1.2rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
+  z-index: 5;
+}
+
+.scroll-btn:hover {
+  background: var(--header-color);
+  color: #fff;
+  border-color: var(--header-color);
+}
+
+.scroll-btn.prev { left: 0.5rem; }
+.scroll-btn.next { right: 0.5rem; }
+
+/* Адаптация слайдера для десктопов */
 @media (min-width: 1024px) {
   .slider-track {
     display: grid;
@@ -191,34 +316,89 @@ header, nav, main, footer, .feedback {
     scroll-snap-type: none;
     padding-inline: 0;
   }
+  
   .column {
     width: 100%;
     flex: none;
   }
+  
+  .scroll-btn {
+    display: none; /* Кнопки не нужны на больших экранах */
+  }
 }
 
 /* --- ФОРМА ОБРАТНОЙ СВЯЗИ --- */
+.feedback {
+  margin: 4rem auto;
+}
+
 .feedback form {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.5rem;
   max-width: 600px;
-  margin: 3rem 0;
+  margin: 0 auto;
 }
 
+/* Контейнер для реализации Floating Label */
 .form-group {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column-reverse; /* Позволяет использовать соседний селектор + в CSS */
+  position: relative;
 }
 
-input, textarea {
+.form-group input {
+  padding: 1.2rem 1rem 0.6rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: transparent;
+  transition: border-color var(--transition-speed);
+  width: 100%;
+}
+
+/* Прячем дефолтный placeholder, пока поле не в фокусе */
+.form-group input::placeholder {
+  color: transparent;
+}
+
+.form-group label {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  color: #999;
+  font-size: 1rem;
+  pointer-events: none;
+  transition: transform var(--transition-speed), font-size var(--transition-speed), color var(--transition-speed);
+  transform-origin: left top;
+}
+
+/* Логика анимации плавающей метки */
+.form-group input:focus {
+  outline: none;
+  border-color: var(--header-color);
+}
+
+.form-group input:focus ~ label,
+.form-group input:not(:placeholder-shown) ~ label {
+  transform: translateY(-0.6rem) scale(0.75);
+  color: var(--header-color);
+}
+
+/* Текстовое поле */
+textarea {
+  width: 100%;
+  min-height: 120px;
   padding: 1rem;
   border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color var(--transition-speed);
 }
 
-input:focus, textarea:focus {
+textarea:focus {
   outline: none;
   border-color: var(--header-color);
 }
@@ -226,47 +406,105 @@ input:focus, textarea:focus {
 button[type="submit"] {
   background: var(--header-color);
   color: white;
-  padding: 1rem;
+  padding: 1.1rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: 700;
+  font-size: 0.95rem;
   text-transform: uppercase;
-  transition: opacity var(--transition-speed);
+  letter-spacing: 0.05em;
+  transition: background-color var(--transition-speed), box-shadow var(--transition-speed);
 }
 
-button[type="submit"]:hover { opacity: 0.9; }
+button[type="submit"]:hover {
+  background: #36120d;
+  box-shadow: 0 4px 12px rgba(74, 26, 19, 0.2);
+}
 
 /* --- FOOTER --- */
 footer {
-  background: #f4f4f4;
+  background: #fdfbf7;
+  border-top: 1px solid #f0e6d2;
   padding: 3rem var(--container-gap);
   display: grid;
-  gap: 2rem;
-  margin-top: 4rem;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  margin-top: 5rem;
+  text-align: center;
 }
 
-.adresses p, .adresses a {
+.adresses p, 
+.adresses a {
   display: block;
   margin-bottom: 0.5rem;
   text-decoration: none;
-  color: #333;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.adresses a:hover {
+  color: var(--header-color);
+}
+
+.downHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.downHeader h2.footer {
+  font-size: 1.3rem;
+  color: var(--header-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.privacy {
+  font-size: 0.85rem;
+  color: #888;
+  text-decoration: underline;
+  transition: color var(--transition-speed);
+}
+
+.privacy:hover {
+  color: var(--accent-gold);
 }
 
 .links {
   display: flex;
-  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
 }
 
 .icon-link img {
   width: 32px;
   height: 32px;
   object-fit: contain;
+  transition: transform var(--transition-speed), opacity var(--transition-speed);
 }
 
+.icon-link:hover img {
+  transform: translateY(-3px);
+  opacity: 0.85;
+}
+
+/* Десктопная адаптация подвала */
 @media (min-width: 768px) {
   footer {
     grid-template-columns: repeat(3, 1fr);
+    text-align: left;
     align-items: start;
+  }
+
+  .downHeader {
+    align-items: center;
+  }
+
+  .links {
+    justify-content: flex-end;
   }
 }
