@@ -1,53 +1,38 @@
-/**
- * UI & Feedback Logic
- */
-
 document.addEventListener('DOMContentLoaded', () => {
-  
-  // 1. СЛАЙДЕР: Логика перемещения
-  const track = document.querySelector('.slider-track');
-  const nextBtn = document.querySelector('.scroll-btn.next');
-  const prevBtn = document.querySelector('.scroll-btn.prev');
+  const menuTriggers = document.querySelectorAll('.topmenu > li > a.down');
 
-  if (track && nextBtn && prevBtn) {
-    const step = () => track.clientWidth * 0.8;
+  menuTriggers.forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+      // Логика клика работает только на мобильных экранах (ширина < 768px)
+      if (window.innerWidth < 768) {
+        e.preventDefault();
+        e.stopPropagation();
 
-    nextBtn.addEventListener('click', () => {
-      track.scrollBy({ left: step(), behavior: 'smooth' });
+        const parentLi = trigger.parentElement;
+        const isOpen = parentLi.classList.contains('is-open');
+
+        // Закрываем все остальные открытые подменю перед открытием текущего
+        document.querySelectorAll('.topmenu > li').forEach(li => {
+          if (li !== parentLi) {
+            li.classList.remove('is-open');
+          }
+        });
+
+        // Переключаем класс состояния текущего подменю
+        parentLi.classList.toggle('is-open', !isOpen);
+      }
     });
+  });
 
-    prevBtn.addEventListener('click', () => {
-      track.scrollBy({ left: -step(), behavior: 'smooth' });
-    });
-  }
-
-  // 2. ФОРМА: Отправка "записки"
-  const feedbackForm = document.getElementById('feedbackForm');
-
-  if (feedbackForm) {
-    feedbackForm.addEventListener('submit', (event) => {
-      // Предотвращаем перезагрузку страницы
-      event.preventDefault();
-
-      // Собираем всё, что ввёл пользователь (даже если там пусто или мусор)
-      const formData = new FormData(feedbackForm);
-      const payload = Object.fromEntries(formData.entries());
-
-      // Имитация или реальная отправка на сервер
-      fetch('/api/send-message', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(() => {
-        console.log('Сообщение ушло:', payload);
-        feedbackForm.reset(); // Очищаем форму после отправки
-      })
-      .catch(err => {
-        // Даже если сервер ответил ошибкой, мы не беспокоим пользователя алертами
-        console.error('Ошибка сети, но форма очищена для следующей попытки');
-        feedbackForm.reset(); 
-      });
-    });
-  }
+  // Закрытие активного подменю при клике вне области навигации
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth < 768) {
+      const nav = document.querySelector('.sticky-nav');
+      if (nav && !nav.contains(e.target)) {
+        document.querySelectorAll('.topmenu > li').forEach(li => {
+          li.classList.remove('is-open');
+        });
+      }
+    }
+  });
 });

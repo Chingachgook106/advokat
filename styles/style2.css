@@ -18,7 +18,9 @@ body {
   font-family: system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   color: #333;
-  overflow-x: hidden;
+  overflow-x: hidden; 
+  /* Позволяет меню "видеть" шкалу прокрутки шапки, находящейся на одном уровне */
+  timeline-scope: --header-timeline;
 }
 
 /* Общий контейнер для всех секций */
@@ -37,14 +39,15 @@ header, nav, main, footer, .feedback {
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  background-attachment: scroll; /* Никакого параллакса для сохранения привязки */
-  
+  background-attachment: scroll; /* Никакого параллакса для сохранения привязки */  
   display: flex;
   align-items: flex-start;
-  justify-content: flex-start;
-  
+  justify-content: flex-start;  
   padding-top: 3%;
-  padding-left: 4%;
+  padding-left: 4%; 
+  /* Создаем именованную шкалу, которая отслеживает выход шапки из экрана */
+  view-timeline-name: --header-timeline;
+  view-timeline-axis: block;
 }
 
 .title-group {
@@ -72,7 +75,6 @@ header, nav, main, footer, .feedback {
 .title-line-1 {
   display: flex;
   align-items: center;
-  /* gap: 0.1em; */
 }
 
 .drop-cap {
@@ -113,7 +115,6 @@ header, nav, main, footer, .feedback {
 /* --- ПРОМЕЖУТОЧНАЯ АДАПТАЦИЯ (550px+) --- */
 @media (min-width: 550px) {
   .title-line-2 {
-    /* Увеличение "воздуха" между словами по вашей логике (п.1) */
     padding-left: calc(2.5em + 0.1em); 
     transition: padding-left var(--transition-speed);
   }
@@ -122,12 +123,11 @@ header, nav, main, footer, .feedback {
 /* --- DESKTOP ADAPTATION (1024px+) --- */
 @media (min-width: 1024px) {
   .header {
-    max-height: 95vh; /* Предохранитель высоты (п.2) */
+    max-height: 95vh; /* Предохранитель высоты */
     padding-top: 2%;  /* Чуть больше отступ на ПК для баланса */
   }
 
   .title-line-2 {
-    /* Максимальный сдвиг для широких экранов */
     padding-left: calc(2.5em + 0.1em);
   }
 }
@@ -144,7 +144,6 @@ nav {
   gap: 1.5rem;
   padding: 1rem 0;
   border-bottom: 1px solid #eee;
-  /* Плавный скролл на мобильных */
   overflow-x: auto;
   scrollbar-width: none; /* Firefox */
   -webkit-overflow-scrolling: touch;
@@ -172,14 +171,210 @@ nav {
 .topmenu a.active, 
 .topmenu a:hover {
   color: var(--header-color);
+} 
+
+/* --- БАЗОВЫЕ СТИЛИ НАВИГАЦИИ (СТИКЕР-ЭФФЕКТ) --- */
+.sticky-nav {
+  position: sticky;
+  top: env(safe-area-inset-top, 0); /* Безопасная зона для "челок" смартфонов */
+  z-index: 100;
+  width: 100%;
+  background-color: #ffffff;
+  transition: box-shadow var(--transition-speed);
 }
 
-/* Выпадающее меню (Desktop Only) */
-@media (min-width: 768px) {
+/* --- МОБИЛЬНАЯ НАВИГАЦИЯ (MOBILE FIRST — ДО 767px включительно) --- */
+@media (max-width: 767px) {
+  .sticky-nav {
+    animation: shrinkAndFadeMobile linear both;
+    animation-timeline: --header-timeline;
+    animation-range: exit;
+  }
+
   .topmenu {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 0.6rem; /* Зазор между параллелограммами */
+    padding: 1.2rem 0.5rem;
+    border-bottom: none;
     overflow: visible;
   }
-  
+
+  .topmenu li {
+    flex: 1;
+    max-width: 110px;
+    position: static; /* Позволяет .submenu позиционироваться во всю ширину sticky-nav */
+  }
+
+  /* МЕТОД ПРЯМОГО СКОСА С КОМПЕНСАЦИЕЙ */
+  .topmenu a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    text-decoration: none;
+    
+    /* Прямой скос и дизайнерский радиус */
+    border: 1px solid var(--header-color);
+    transform: skewX(-30deg); 
+    border-radius: 6px; 
+    
+    background-color: transparent;
+    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+  }
+
+  /* Состояния кнопок (заливка применяется напрямую) */
+  .topmenu a.active,
+  .topmenu a:hover {
+    background-color: var(--header-color);
+    border-color: var(--header-color);
+  }
+
+  /* Компенсация искажения для SVG-текста */
+  .menu-text-svg {
+    transform: skewX(30deg) rotate(-30deg);
+    width: 100%;
+    height: auto;
+    max-height: 18px;
+  }
+
+  .svg-text {
+    font-size: 16px;
+    font-weight: 700;
+    fill: var(--header-color);
+    text-transform: uppercase;
+    font-family: inherit;
+    letter-spacing: 0.05em;
+    transition: fill var(--transition-speed);
+  }
+
+  .topmenu a.active .svg-text,
+  .topmenu a:hover .svg-text {
+    fill: #ffffff;
+  }
+
+  /* --- МОБИЛЬНОЕ ПОДМЕНЮ (РЕАЛИЗАЦИЯ БЕЗ !IMPORTANT) --- */
+  .submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border-top: 1px solid #f0e6d2;
+    border-bottom: 1px solid #f0e6d2;
+    box-shadow: 0 8px 24px rgba(74, 26, 19, 0.12);
+    padding: 0.5rem 0;
+    list-style: none;
+    z-index: 110;
+  }
+
+  /* Отображаем подменю при добавлении класса состояния через JS */
+  .topmenu li.is-open .submenu {
+    display: block;
+  }
+
+  .submenu li {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  /* Сброс скосов и рамок родительских пунктов для ссылок выпадающего меню */
+  .submenu a {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    height: auto;
+    border: none;
+    border-radius: 0;
+    transform: none; /* Полный сброс skewX */
+    background-color: transparent;
+    color: #555;
+    text-transform: none;
+    transition: background-color var(--transition-speed), color var(--transition-speed);
+  }
+
+  /* Обычные ровные надписи внутри раскрывающегося списка */
+  .submenu .menu-text-svg {
+    transform: none;
+    max-height: none;
+    width: auto;
+    height: auto;
+  }
+
+  .submenu a:hover,
+  .submenu a:active {
+    background-color: #fcfaf6;
+    color: var(--header-color);
+  }
+}
+
+/* --- ДЕСКТОПНАЯ И ПЛАНШЕТНАЯ НАВИГАЦИЯ (ОТ 768px и шире) --- */
+@media (min-width: 768px) {
+  /* Привязываем только анимацию прозрачности (без изменения высоты) */
+  .sticky-nav {
+    animation: fadeOnlyDesktop linear both;
+    animation-timeline: --header-timeline;
+    animation-range: exit;
+  }
+
+  .topmenu {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+    overflow: visible;
+  }
+
+  .topmenu li {
+    flex: 1;
+    max-width: 160px;
+    position: relative;
+  }
+
+  /* Традиционные прямоугольные кнопки */
+  .topmenu a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--header-color);
+    text-decoration: none;
+    transition: background-color var(--transition-speed), border-color var(--transition-speed);
+  }
+
+  .topmenu a.active, 
+  .topmenu a:hover {
+    background-color: var(--header-color);
+    border-color: var(--header-color);
+  }
+
+  /* SVG на десктопе отображается прямо, без наклонов */
+  .menu-text-svg {
+    width: 100%;
+    height: auto;
+    max-height: 22px;
+    transform: none;
+  }
+
+  .svg-text {
+    font-size: 14px;
+    font-weight: 600;
+    fill: var(--header-color);
+    text-transform: uppercase;
+    font-family: inherit;
+    transition: fill var(--transition-speed);
+  }
+
+  .topmenu a.active .svg-text,
+  .topmenu a:hover .svg-text {
+    fill: #ffffff;
+  }
+
+  /* Традиционное выпадающее меню при наведении на десктопе */
   .topmenu li:hover .submenu,
   .topmenu li:focus-within .submenu {
     opacity: 1;
@@ -188,11 +383,11 @@ nav {
   }
 
   .submenu {
-    display: block; /* Вместо none управляем через opacity для анимации */
+    display: block;
     position: absolute;
     top: 100%;
     left: 0;
-    min-width: 160px;
+    min-width: 180px;
     background: #ffffff;
     border: 1px solid #eee;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -203,22 +398,59 @@ nav {
     visibility: hidden;
     transform: translateY(10px);
     transition: opacity var(--transition-speed), transform var(--transition-speed), visibility var(--transition-speed);
+    z-index: 10;
   }
 
   .submenu li {
-    width: 100%;
+    max-width: 100%;
   }
 
   .submenu a {
     display: block;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.2rem;
     font-size: 0.85rem;
     color: #555;
+    border: none;
+    justify-content: flex-start;
   }
 
   .submenu a:hover {
     background-color: #fcfaf6;
     color: var(--header-color);
+  }
+}
+
+/* --- КЛЮЧЕВЫЕ КАДРЫ СКРОЛЛ-АНИМАЦИЙ --- */
+
+/* 1. Мобильная анимация: Сжатие высоты + прозрачность фона + тень */
+@keyframes shrinkAndFadeMobile {
+  from {
+    background-color: rgb(255, 255, 255);
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  to {
+    background-color: rgba(253, 251, 247, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    box-shadow: 0 4px 20px rgba(74, 26, 19, 0.08); /* Теплая тень */
+  }
+}
+
+/* 2. Десктопная анимация: Только прозрачность фона + появление тени */
+@keyframes fadeOnlyDesktop {
+  from {
+    background-color: rgb(255, 255, 255);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+  to {
+    background-color: rgba(253, 251, 247, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(74, 26, 19, 0.05);
   }
 }
 
@@ -323,7 +555,7 @@ article p {
   }
   
   .scroll-btn {
-    display: none; /* Кнопки не нужны на больших экранах */
+    display: none;
   }
 }
 
@@ -343,7 +575,7 @@ article p {
 /* Контейнер для реализации Floating Label */
 .form-group {
   display: flex;
-  flex-direction: column-reverse; /* Позволяет использовать соседний селектор + в CSS */
+  flex-direction: column-reverse;
   position: relative;
 }
 
